@@ -310,7 +310,7 @@ body {
     font-weight: 500;
 }
 
-/* ===== Messages ===== */
+/* Messages */
 
 
 .messages__wrapper {
@@ -406,4 +406,220 @@ body {
     font-weight: 300;
     font-size: 20px;
     /* color: #5c5c77; */
+}
+
+/* ============================= */
+
+
+
+/* ======= Users ======== */
+
+.users__wrapper {
+   
+}
+.users__inner {
+    display: flex;
+    flex-direction: column;
+}
+.users__title {
+}
+.title__main {
+    font-size: 40px;
+    color: #3e3f5e;
+    padding-left: 40px;
+    padding-top: 40px;
+}
+.title__subtitle {
+    font-size: 25px;
+    color: #3e3f5e;
+    padding-left: 40px;
+}
+.user__search {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-self: center;
+    margin-top: 40px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    min-width: 1000px;
+    height: 80px;
+}
+.search__title {
+    font-size: 23px;
+    margin-left: 20px;
+}
+.search__field {
+    margin-left: 40px;
+}
+.search__select{
+    margin-left: 20px;
+}
+.search__select select{
+    display: inline-block;
+    border: 1px solid #3e3f5e;
+    width: 310px;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+.search__field input{
+    border: 1px solid #3e3f5e;
+    width: 310px;
+    height: 40px;
+    padding-left: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.search__btn{
+    margin-left: 25px;
+}
+.search__btn button{
+    width: 90px;
+    height: 40px;
+    border: 2px solid #615dfa;
+    border-radius: 25px;
+    background-color: #ffffff;
+    color: #615dfa;
+    font-size: 16px;
+    font-weight: 500;
+}
+.users__pagination {
+    align-self: center;
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+.users__pagination span {
+    display: inline-block;
+    background-color: #ffffff;
+    min-width: 40px;
+    height: 30px;
+    text-align: center;
+    padding-top: 7px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 3px;
+}
+.users__pagination .active{
+    background-color: #FFCD61;
+}
+.users__content{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+.user__wrapper {
+    margin-left: 63px;
+    margin-bottom: 35px;
+}
+.user__inner {
+    width: 300px;
+    height: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0px 6px 11px -3px rgba(0,0,0,0.4);
+}
+.user__bg {
+    background-color: #8886FD;
+    border-radius: 15px 15px 0 0;
+    height: 120px;
+    align-self: stretch;
+}
+.user__avatar {
+    background-color: #ffffff;
+    border-radius: 50%;
+    padding: 8px;
+    position: absolute;
+    top: 45px;
+    border: 1px solid #3e3f5e;
+}
+.user__avatar img{
+    width: 120px;
+}
+.user__name {
+    margin-top: 78px;
+    font-size: 22px;
+    color:#828181;
+}
+.user__topskill {
+    font-size: 20px;
+    /* color: #3e3f5e; */
+    font-weight: 400;
+    margin-top: 3px;
+}
+.user__contacts {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+.contacts__following {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid;
+    padding-right: 15px;
+}
+.following__count {
+    font-size: 18px;
+}
+.following__text {
+    font-size: 12px;
+    margin-top: 7px;
+    color: #828181;
+}
+.contacts__followers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15px;
+}
+.followers__count {
+    font-size: 18px;
+}
+.followers__text {
+    font-size: 12px;
+    margin-top: 7px;
+    color: #828181;
+}
+.user__action {
+    display: flex;
+    margin-top: 40px;
+}
+.action__follow {
+    width: 95px;
+    height: 40px;
+    border-radius: 10px;
+    /* background-color: #FFCD61; */
+    background-color: #9de5ee;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.action__unfollow {
+    width: 95px;
+    height: 40px;
+    border-radius: 10px;
+    /* background-color: #FFCD61; */
+    background-color: #9de5ee;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.action__message {
+    width: 95px;
+    height: 40px;
+    border-radius: 10px;
+    /* background-color: #8886fc; */
+    background-color: #9de5ee;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 10px;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import studentMan from '../../common/img/man-student.png'
+import studentMan from '../../assets/img/man-student.png'
 import { connect } from 'react-redux'
 import { AppStateType } from '../../redux/store/store'
 import { addPostAC, changeInputAC } from '../../redux/profile-reducer/actions' 

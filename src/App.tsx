@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
+import logo from './assets/img/logo_brainly.png'
+import { Switch, Route, NavLink } from 'react-router-dom';
 import Profile from './components/profile/Profile';
-import logo from './common/img/logo_brainly.png'
+import UsersContainer from './components/users/UsersContainer';
 
 function App() {
   return (
@@ -20,14 +22,19 @@ function App() {
                     </div>
                 </div>
                 <div className='main-content'>
-                  <Profile />
+                  <Switch>
+                  <Route path='/profile' component={Profile} />
+                  <Route path='/news' render={() => 'News Feed will be here'} />
+                  <Route path='/messages' render={() => 'Messages will be here'} />
+                  <Route path='/users' component={UsersContainer} />
+                  </Switch>
                 </div>
                 <div className='sidebar'>
                     <div className='sidebar__links'>
-                        <div><a href='#'>Profile</a></div>
-                        <div><a href='#'>News feed</a></div>
-                        <div><a href='#'>Messages</a></div>
-                        <div><a href='#'>Users</a></div>
+                        <div><NavLink to='/profile'>Profile</NavLink></div>
+                        <div><NavLink to='/news'>News feed</NavLink></div>
+                        <div><NavLink to='/messages'>Messages</NavLink></div>
+                        <div><NavLink to='/users'>Users</NavLink></div>
                     </div>
                 </div>
             </div>

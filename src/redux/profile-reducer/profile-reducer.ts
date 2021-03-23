@@ -1,5 +1,5 @@
 import { v1 } from "uuid"
-import { AllProfileActionsType, ACTIONS_TYPE } from "./actions"
+import { AllProfileActionsType, ACTIONS_TYPE_PROFILE } from "./actions"
 
 type MessagesType = {
     id: string
@@ -25,13 +25,13 @@ const initialState: ProfileStateType = {
 export const profileReducer = (state: ProfileStateType = initialState, action: AllProfileActionsType): ProfileStateType => {
     switch(action.type){
 
-        case ACTIONS_TYPE.CHANGE_INPUT: {
+        case ACTIONS_TYPE_PROFILE.CHANGE_INPUT: {
             return {
                 ...state,
                 newPostText: action.payload.inputValue
             }
         }
-        case ACTIONS_TYPE.ADD_POST: {
+        case ACTIONS_TYPE_PROFILE.ADD_POST: {
             return {
                 ...state,
                 posts: [{id: v1(), author: 'Kirill Laptev', message: state.newPostText, time: '1 min ago', photo: 'https://i.ibb.co/Cv7tZC8/man-student.png'}, ...state.posts],
