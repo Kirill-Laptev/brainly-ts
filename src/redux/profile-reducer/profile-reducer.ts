@@ -1,7 +1,7 @@
 import { v1 } from "uuid"
 import { AllProfileActionsType, ACTIONS_TYPE_PROFILE } from "./actions"
 
-type MessagesType = {
+export type MessagesType = {
     id: string
     author: string
     message: string
@@ -9,12 +9,35 @@ type MessagesType = {
     time: string
 }
 
+export type UserProfileType = {
+    userId: string
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    contacts: {
+        github: string
+        vk: string
+        facebook: string
+        instagram: string
+        twitter: string
+        website: string
+        youtube: string
+        mainLink: string
+    }
+    photos: {
+        small: string
+    large: string
+    }
+}
+
 export type ProfileStateType = {
+    userProfile: UserProfileType | null
     posts: Array<MessagesType>
     newPostText: string
 }
 
 const initialState: ProfileStateType = {
+    userProfile: null,
     posts: [
         {id: v1(), author: 'Svetlana Belikova', message: 'Can you help me with TS ?', time: '4 hours ago', photo: 'https://i.ibb.co/wKHwqxZ/woman-student.png'},
         {id: v1(), author: 'Kirill Laptev', message: 'Hi, guys! Today i can support 2-3 people in Zoom. You can answer your question, and i will do code-review. Just send PM to me.', time: '10 hours ago', photo: 'https://i.ibb.co/Cv7tZC8/man-student.png'}
@@ -38,6 +61,12 @@ export const profileReducer = (state: ProfileStateType = initialState, action: A
                 newPostText: ''
             }
 
+        }
+        case ACTIONS_TYPE_PROFILE.SET_USER_PROFILE: {
+            return {
+                ...state,
+                userProfile: action.payload.userProfile
+            }
         }
             
         default:

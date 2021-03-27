@@ -540,6 +540,7 @@ body {
 }
 .user__avatar img{
     width: 120px;
+    border-radius: 50%;
 }
 .user__name {
     margin-top: 78px;

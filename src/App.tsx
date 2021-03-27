@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import logo from './assets/img/logo_brainly.png'
 import { Switch, Route, NavLink } from 'react-router-dom';
-import Profile from './components/profile/Profile';
+import ProfileContainer from './components/profile/ProfileContainer';
 import UsersContainer from './components/users/UsersContainer';
+import HeaderContainer from './components/header/HeaderContainer';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
        <div className='app__wrapper'>
         <div className='app__inner'>
             <div className='container'>
-                <div className='header'>
+                {/* <div className='header'>
                     <div className='header__body'>
                         <div className='header__logo'>
                             <img src={logo} alt=''/>
@@ -20,10 +20,11 @@ function App() {
                             <button>Login</button>
                         </div>
                     </div>
-                </div>
+                </div> */}
+                <HeaderContainer />
                 <div className='main-content'>
                   <Switch>
-                  <Route path='/profile' component={Profile} />
+                  <Route path='/profile/:userID?' component={ProfileContainer} />
                   <Route path='/news' render={() => 'News Feed will be here'} />
                   <Route path='/messages' render={() => 'Messages will be here'} />
                   <Route path='/users' component={UsersContainer} />

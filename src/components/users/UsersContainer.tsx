@@ -1,11 +1,12 @@
 import React from 'react'
 import studentAvatar from '../../assets/img/man-student.png'
-import { API } from '../api/API'
+import { usersAPI } from '../../api/users-api'
 import { connect } from 'react-redux'
 import { UserType } from '../../redux/users-reducer/users-reducer'
 import { Dispatch } from 'redux'
 import { setUsersAC, followAC, unfollowAC, setCurrentPageAC, setTotalUsersCountAC } from '../../redux/users-reducer/actions'
 import { AppStateType } from '../../redux/store/store'
+import { NavLink } from 'react-router-dom'
 
 
 // Всю эту рандомизацию вынести в отдельный файл
@@ -28,16 +29,16 @@ for(let i = 0; i < 12; i++){
 class UsersContainer extends React.Component<UsersContainerPropsType> {
 
     componentDidMount(){
-        API.getUsers(this.props.countItems, this.props.currentPage)
-        .then((response) => {
-            this.props.setUsers(response.items)
-            this.props.setTotalUsersCount(response.totalCount)
+        usersAPI.getUsers(this.props.countItems, this.props.currentPage)
+        .then(({data}) => {
+            this.props.setUsers(data.items)
+            this.props.setTotalUsersCount(data.totalCount)
         })
     }
 
     onPageChanged = (page: number) => {
-        API.getUsers(this.props.countItems, page)
-        .then((response) => this.props.setUsers(response.items))
+        usersAPI.getUsers(this.props.countItems, page)
+        .then(({data}) => this.props.setUsers(data.items))
         .finally(() => this.props.setCurrentPage(page))
     }
 
@@ -50,75 +51,81 @@ class UsersContainer extends React.Component<UsersContainerPropsType> {
         }
 
 
-        return <>
-            <div className='users__wrapper'>
-                <div className='users__inner'>
-                    <div className='users__title'>
-                        <div className='title__main'>Members</div>
-                        <div className='title__subtitle'>Browse all the members of the community!</div>
-                    </div>
-                    <div className='user__search'>
-                        <div className='search__title'>Search and filter</div>
-                        <div className='search__field'><input placeholder='Search by name' /></div>
-                        <div className='search__select'>
-                            <select>
-                                <option value='all'>All</option>
-                                <option value='following'>Only following</option>
-                                <option value='unfollowing'>Only unfollowing</option>
-                            </select>
+        return (
+             <>
+                <div className='users__wrapper'>
+                    <div className='users__inner'>
+                        <div className='users__title'>
+                            <div className='title__main'>Members</div>
+                            <div className='title__subtitle'>Browse all the members of the community!</div>
                         </div>
-                        <div className='search__btn'>
-                            <button>Search</button>
+                        <div className='user__search'>
+                            <div className='search__title'>Search and filter</div>
+                            <div className='search__field'><input placeholder='Search by name' /></div>
+                            <div className='search__select'>
+                                <select>
+                                    <option value='all'>All</option>
+                                    <option value='following'>Only following</option>
+                                    <option value='unfollowing'>Only unfollowing</option>
+                                </select>
+                            </div>
+                            <div className='search__btn'>
+                                <button>Search</button>
+                            </div>
                         </div>
-                    </div>
-                    <div className='users__pagination'>
-                        <span>{'<<'}</span>
-                        <span>{'<'}</span>
-                        {pages.map((page) => {
-                            return (
-                                <span 
-                                key={page} 
-                                onClick={() => this.onPageChanged(page)}
-                                className={this.props.currentPage === page ? 'active' : ''}
-                                >{page}</span>
-                            )
-                        })}
-                        <span>{'>'}</span>
-                        <span>{'>>'}</span>
-                    </div>
-                    <div className='users__content'>    
-                        {this.props.users.map((user, i) => {
-                            return (
-                                <div key={user.id} className='user__wrapper'>
-                                <div className='user__inner'>
-                                    <div className='user__bg'></div>
-                                    <div className='user__avatar'><img src={studentAvatar} /></div>
-                                    <div className='user__name'>{user.name}</div>
-                                    <div className='user__topskill'>{randomSpecialization[i]}</div>
-                                    <div className='user__contacts'>
-                                        <div className='contacts__following'>
-                                        <div className='following__count'>{arrFollowing[i]}</div>
-                                            <div className='following__text'>FOLLOWING</div>
+                        <div className='users__pagination'>
+                            <span>{'<<'}</span>
+                            <span>{'<'}</span>
+                            {pages.map((page) => {
+                                return (
+                                    <span 
+                                    key={page} 
+                                    onClick={() => this.onPageChanged(page)}
+                                    className={this.props.currentPage === page ? 'active' : ''}
+                                    >{page}</span>
+                                )
+                            })}
+                            <span>{'>'}</span>
+                            <span>{'>>'}</span>
+                        </div>
+                        <div className='users__content'>    
+                            {this.props.users.map((user, i) => {
+                                return (
+                                    <div key={user.id} className='user__wrapper'>
+                                    <div className='user__inner'>
+                                        <div className='user__bg'></div>
+                                        <div className='user__avatar'>
+                                            <NavLink to={`/profile/${user.id}`}>
+                                                <img src={user.photos.large ? user.photos.large : studentAvatar} />
+                                            </NavLink>
+                                            </div>
+                                        <div className='user__name'>{user.name}</div>
+                                        <div className='user__topskill'>{randomSpecialization[i]}</div>
+                                        <div className='user__contacts'>
+                                            <div className='contacts__following'>
+                                            <div className='following__count'>{arrFollowing[i]}</div>
+                                                <div className='following__text'>FOLLOWING</div>
+                                            </div>
+                                            <div className='contacts__followers'>
+                                            <div className='followers__count'>{arrFollowers[i]}</div>
+                                                <div className='followers__text'>FOLLOWERS</div>
+                                            </div>
                                         </div>
-                                        <div className='contacts__followers'>
-                                        <div className='followers__count'>{arrFollowers[i]}</div>
-                                            <div className='followers__text'>FOLLOWERS</div>
+                                        <div className='user__action'>
+                                            {user.followed 
+                                            ? <button className='action__unfollow' onClick={() => this.props.unfollow(user.id)}>Unfollow</button>
+                                            : <button className='action__follow' onClick={() => this.props.follow(user.id)}>Follow</button>}
+                                            <button className='action__message'>Message</button>
                                         </div>
-                                    </div>
-                                    <div className='user__action'>
-                                        {user.followed 
-                                        ? <button className='action__unfollow' onClick={() => this.props.unfollow(user.id)}>Unfollow</button>
-                                        : <button className='action__follow' onClick={() => this.props.follow(user.id)}>Follow</button>}
-                                        <button className='action__message'>Message</button>
                                     </div>
                                 </div>
-                            </div>
-                            )
-                        })}
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </>
+        )
     }
 }
 
