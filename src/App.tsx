@@ -25,9 +25,10 @@ function App() {
                 <div className='main-content'>
                   <Switch>
                   <Route path='/profile/:userID?' component={ProfileContainer} />
-                  <Route path='/news' render={() => 'News Feed will be here'} />
-                  <Route path='/messages' render={() => 'Messages will be here'} />
+                  <Route path='/news' render={() => <div>News Feed will be here</div>} />
+                  <Route path='/messages' render={() => <div>Messages will be here</div>} />
                   <Route path='/users' component={UsersContainer} />
+                  <Route path='/login' render={() => <div>Login form will be here</div>} />
                   </Switch>
                 </div>
                 <div className='sidebar'>

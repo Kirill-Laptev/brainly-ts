@@ -1,13 +1,15 @@
 import React from 'react'
 import studentMan from '../../assets/img/man-student.png'
 import { connect } from 'react-redux'
-import { AppStateType } from '../../redux/store/store'
-import { addPostAC, changeInputAC, setUserProfileAC } from '../../redux/profile-reducer/actions' 
-import { UserProfileType, MessagesType } from '../../redux/profile-reducer/profile-reducer'
-import { Dispatch, compose } from 'redux'
+import { AppStateType, ActionsType } from '../../redux/store/store'
+import { addPostAC, changeInputAC, getUserProfileDataTC } from '../../redux/profile-reducer/actions' 
+import { MessagesType } from '../../redux/profile-reducer/profile-reducer'
+import { compose } from 'redux'
 import ProfileInfo from './ProfileInfo'
-import { profileAPI } from '../../api/profile-api'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withAuthRedirect } from '../../hoc/withAuthRedirect'
+import { ThunkDispatch } from 'redux-thunk'
+import { UserProfileType } from '../../api/profile-api'
 
 // Типизация userID, получаемого из URL
 type PathParamsType = {
@@ -28,8 +30,7 @@ class ProfileContainer extends React.Component<PropsType> {
         if(!userID){
             userID = '12705'
         }
-        profileAPI.getUserProfile(userID)
-        .then(({data}) => this.props.setUserProfile(data))
+        this.props.getUserProfileData(userID)
     }
 
     onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +95,6 @@ class ProfileContainer extends React.Component<PropsType> {
 
 
 
-
 type MapStateToPropsType = {
     newPostText: string
     posts: Array<MessagesType>
@@ -104,7 +104,7 @@ type MapStateToPropsType = {
 type MapDispatchToPropsType = {
     changeInput: (inputValue: string) => void
     addPost: () => void
-    setUserProfile: (userProfile: UserProfileType) => void
+    getUserProfileData: (userID: string) => void
 }
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
@@ -115,7 +115,7 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     }
 }
 
-const MapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
+const MapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): MapDispatchToPropsType => {
     return {
         changeInput: (inputValue: string) => {
             dispatch(changeInputAC(inputValue))
@@ -123,8 +123,8 @@ const MapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
         addPost: () => {
             dispatch(addPostAC())
         },
-        setUserProfile: (userProfile: UserProfileType) => {
-            dispatch(setUserProfileAC(userProfile))
+        getUserProfileData: (userID: string) => {
+            dispatch(getUserProfileDataTC(userID))
         }
     }
 }
@@ -132,5 +132,6 @@ const MapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
 // Типизация compose
 export default compose<React.ComponentType>(
     connect(mapStateToProps, MapDispatchToProps),
-    withRouter
+    withRouter,
+    withAuthRedirect
 )(ProfileContainer)

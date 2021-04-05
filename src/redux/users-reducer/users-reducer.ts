@@ -1,30 +1,20 @@
+import { UserType } from './../../api/users-api';
 import { ACTIONS_TYPE_USERS, AllUsersActionType } from './actions';
-
-export type UserType = {
-    name: string
-    id: number
-    photos: {
-    small: null | string
-    large: null | string
-    },
-    status: null | string
-    followed: boolean
-    uniqueUrlName: null
-}
 
 export type UsersStateType = {
     users: Array<UserType>
     totalUsersCount: number
     countItems: number
     currentPage: number
+    followingInProgress: Array<number>
 }
-
 
 const initialState: UsersStateType = {
     users: [],
     totalUsersCount: 0,
     countItems: 12,
-    currentPage: 1
+    currentPage: 1,
+    followingInProgress: [],
 }
 
 export const usersReducer = (state: UsersStateType = initialState, action: AllUsersActionType) => {
@@ -70,6 +60,14 @@ export const usersReducer = (state: UsersStateType = initialState, action: AllUs
                 ...state,
                 currentPage: action.currentPage
             }
+
+        case ACTIONS_TYPE_USERS.TOGGLE_FOLLOWING_PROGRESS: 
+            return {
+                ...state,
+                followingInProgress: action.isLoading
+                ? [...state.followingInProgress, action.userID]
+                : [...state.followingInProgress.filter((id) => id !== action.userID)]
+            }    
 
         default:
             return state;

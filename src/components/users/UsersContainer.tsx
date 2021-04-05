@@ -1,12 +1,13 @@
 import React from 'react'
 import studentAvatar from '../../assets/img/man-student.png'
-import { usersAPI } from '../../api/users-api'
 import { connect } from 'react-redux'
-import { UserType } from '../../redux/users-reducer/users-reducer'
-import { Dispatch } from 'redux'
-import { setUsersAC, followAC, unfollowAC, setCurrentPageAC, setTotalUsersCountAC } from '../../redux/users-reducer/actions'
-import { AppStateType } from '../../redux/store/store'
+import { setUsersAC, setCurrentPageAC, setTotalUsersCountAC, toggleFollowingProgressAC, getUsersTC, followTC, unfollowTC, onPageChangedTC } from '../../redux/users-reducer/actions'
+import { AppStateType, ActionsType } from '../../redux/store/store'
 import { NavLink } from 'react-router-dom'
+import { ThunkDispatch } from 'redux-thunk'
+import { compose } from 'redux'
+import { withAuthRedirect } from '../../hoc/withAuthRedirect'
+import { UserType } from '../../api/users-api'
 
 
 // Всю эту рандомизацию вынести в отдельный файл
@@ -29,17 +30,7 @@ for(let i = 0; i < 12; i++){
 class UsersContainer extends React.Component<UsersContainerPropsType> {
 
     componentDidMount(){
-        usersAPI.getUsers(this.props.countItems, this.props.currentPage)
-        .then(({data}) => {
-            this.props.setUsers(data.items)
-            this.props.setTotalUsersCount(data.totalCount)
-        })
-    }
-
-    onPageChanged = (page: number) => {
-        usersAPI.getUsers(this.props.countItems, page)
-        .then(({data}) => this.props.setUsers(data.items))
-        .finally(() => this.props.setCurrentPage(page))
+        this.props.getUsers(this.props.countItems, this.props.currentPage)
     }
 
     render (){
@@ -80,7 +71,7 @@ class UsersContainer extends React.Component<UsersContainerPropsType> {
                                 return (
                                     <span 
                                     key={page} 
-                                    onClick={() => this.onPageChanged(page)}
+                                    onClick={() => this.props.onPageChanged(this.props.countItems, page)}
                                     className={this.props.currentPage === page ? 'active' : ''}
                                     >{page}</span>
                                 )
@@ -113,8 +104,16 @@ class UsersContainer extends React.Component<UsersContainerPropsType> {
                                         </div>
                                         <div className='user__action'>
                                             {user.followed 
-                                            ? <button className='action__unfollow' onClick={() => this.props.unfollow(user.id)}>Unfollow</button>
-                                            : <button className='action__follow' onClick={() => this.props.follow(user.id)}>Follow</button>}
+                                            ? <button 
+                                            className='action__unfollow' 
+                                            onClick={() => this.props.unfollow(user.id)}
+                                            disabled={this.props.followingInprogress.includes(user.id)}
+                                            >Unfollow</button>
+                                            : <button 
+                                            className='action__follow' 
+                                            onClick={() => this.props.follow(user.id)}
+                                            disabled={this.props.followingInprogress.includes(user.id)}
+                                            >Follow</button>}
                                             <button className='action__message'>Message</button>
                                         </div>
                                     </div>
@@ -136,14 +135,18 @@ type mapStateToPropsType = {
     countItems: number
     totalUsersCount: number
     currentPage: number
+    followingInprogress: Array<number>
 }
 
 type mapDispatchToPropsType = {
     setUsers: (users: Array<UserType>) => void
-    follow: (userID: number) => void
-    unfollow: (userID: number) => void
     setTotalUsersCount: (totalUsersCount: number) => void 
     setCurrentPage: (currentPage: number) => void 
+    toggleFollowingProgress: (toggle: boolean, userID: number) => void
+    getUsers: (countItems: number, pagesCount: number) => void
+    follow: (userID: number) => void
+    unfollow: (userID: number) => void
+    onPageChanged: (countItems: number, page: number) => void
 }
 
 type UsersContainerPropsType = mapStateToPropsType & mapDispatchToPropsType
@@ -153,28 +156,42 @@ const mapStateToProps = (state: AppStateType): mapStateToPropsType => {
         users: state.users.users,
         countItems: state.users.countItems,
         totalUsersCount: state.users.totalUsersCount,
-        currentPage: state.users.currentPage
+        currentPage: state.users.currentPage,
+        followingInprogress: state.users.followingInProgress
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): mapDispatchToPropsType => {
     return {
         setUsers: (users: Array<UserType>) => {
             dispatch(setUsersAC(users))
-        },
-        follow: (userID: number) => {
-            dispatch(followAC(userID))
-        },
-        unfollow: (userID: number) => {
-            dispatch(unfollowAC(userID))
         },
         setTotalUsersCount: (totalUsersCount: number) => {
             dispatch(setTotalUsersCountAC(totalUsersCount))
         },
         setCurrentPage: (currentPage: number) => {
             dispatch(setCurrentPageAC(currentPage))
+        },
+        toggleFollowingProgress: (toggle: boolean, userID: number) => {
+            dispatch(toggleFollowingProgressAC(toggle, userID))
+        },
+        getUsers: (countItems: number, currentPage: number) => {
+            dispatch(getUsersTC(countItems, currentPage))
+        },
+        follow: (userID: number) => {
+            dispatch(followTC(userID))
+        },
+        unfollow: (userID: number) => {
+            dispatch(unfollowTC(userID))
+        },
+        onPageChanged: (countItems: number, page: number) => {
+            dispatch(onPageChangedTC(countItems, page))
         }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer)
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuthRedirect
+)(UsersContainer)
+

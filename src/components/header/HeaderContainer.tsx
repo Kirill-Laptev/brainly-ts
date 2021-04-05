@@ -1,10 +1,9 @@
 import React from 'react'
 import logo from '../../assets/img/logo_brainly.png'
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
-import { AppStateType } from '../../redux/store/store'
-import { authAPI, AuthDataType } from '../../api/auth-api'
-import { setAuthDataAC } from '../../redux/auth-reducer/actions'
+import { AppStateType, ActionsType } from '../../redux/store/store'
+import { getAuthUserDataTC } from '../../redux/auth-reducer/actions'
+import { ThunkDispatch } from 'redux-thunk'
 
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
@@ -12,12 +11,7 @@ type PropsType = MapStateToPropsType & MapDispatchToPropsType
 class HeaderContainer extends React.Component<PropsType> {
 
     componentDidMount(){
-        authAPI.getAuthData()
-        .then(({data}) => {
-            if(data.resultCode === 0){
-                this.props.setAuthData(data.data)
-            }
-        })
+        this.props.getAuthUserData()
     }
 
     render() {
@@ -47,7 +41,7 @@ type MapStateToPropsType = {
 }
 
 type MapDispatchToPropsType = {
-    setAuthData: (authData: AuthDataType) => void
+    getAuthUserData: () => void
 }
 
 
@@ -57,10 +51,10 @@ const mapStateToProps = (state: AppStateType) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
     return {
-        setAuthData: (authData: AuthDataType) => {
-        dispatch(setAuthDataAC(authData))
+        getAuthUserData: () => {
+            dispatch(getAuthUserDataTC())
         }
     }
 }

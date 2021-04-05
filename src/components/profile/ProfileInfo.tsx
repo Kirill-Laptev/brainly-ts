@@ -1,6 +1,6 @@
 import React from 'react'
 import studentMan from '../../assets/img/man-student.png'
-import { UserProfileType } from '../../redux/profile-reducer/profile-reducer'
+import { UserProfileType } from '../../api/profile-api'
 
 type PropsType = {
     user: UserProfileType

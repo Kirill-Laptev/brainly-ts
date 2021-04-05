@@ -1,4 +1,7 @@
-import { UserProfileType } from './profile-reducer';
+import { profileAPI, UserProfileType } from './../../api/profile-api';
+import { AppStateType, ActionsType } from './../store/store';
+import { ThunkDispatch, ThunkAction } from 'redux-thunk';
+
 export enum ACTIONS_TYPE_PROFILE {
     CHANGE_INPUT = 'profile/CHANGE_INPUT',
     ADD_POST = 'profile/ADD_POST',
@@ -25,8 +28,8 @@ export type SetUserProfileType = {
 
 export type AllProfileActionsType = ChangeInputType | AddPostType | SetUserProfileType
 
-
-export const changeInputAC = (inputValue: string) => {
+// Actions
+export const changeInputAC = (inputValue: string): ChangeInputType => {
     return {type: ACTIONS_TYPE_PROFILE.CHANGE_INPUT, payload: {inputValue}}
 }
 
@@ -34,8 +37,16 @@ export const addPostAC = (): AddPostType => {
     return {type: ACTIONS_TYPE_PROFILE.ADD_POST}
 }
 
-export const setUserProfileAC = (userProfile: UserProfileType) => {
+export const setUserProfileAC = (userProfile: UserProfileType): SetUserProfileType => {
     return {type: ACTIONS_TYPE_PROFILE.SET_USER_PROFILE, payload: {userProfile}}
 }
 
+// Thunk's
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsType>
 
+export const getUserProfileDataTC = (userID: string): ThunkType => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+        profileAPI.getUserProfile(userID)
+        .then(({data}) => dispatch(setUserProfileAC(data)))
+    }
+}

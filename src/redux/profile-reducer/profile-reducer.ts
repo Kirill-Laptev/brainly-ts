@@ -1,3 +1,4 @@
+import { UserProfileType } from './../../api/profile-api';
 import { v1 } from "uuid"
 import { AllProfileActionsType, ACTIONS_TYPE_PROFILE } from "./actions"
 
@@ -7,27 +8,6 @@ export type MessagesType = {
     message: string
     photo: string
     time: string
-}
-
-export type UserProfileType = {
-    userId: string
-    lookingForAJob: boolean
-    lookingForAJobDescription: string
-    fullName: string
-    contacts: {
-        github: string
-        vk: string
-        facebook: string
-        instagram: string
-        twitter: string
-        website: string
-        youtube: string
-        mainLink: string
-    }
-    photos: {
-        small: string
-    large: string
-    }
 }
 
 export type ProfileStateType = {
