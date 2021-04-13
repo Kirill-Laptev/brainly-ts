@@ -15,15 +15,14 @@ const initialState: AuthStateType = {
 }
 
 
-export const authReducer = (state: AuthStateType = initialState, action: AllAuthActionsType) => {
+export const authReducer = (state: AuthStateType = initialState, action: AllAuthActionsType): AuthStateType => {
     switch(action.type){
-        case ACTIONS_TYPE_AUTH.SET_AUTH_DATA: {
+        case ACTIONS_TYPE_AUTH.SET_AUTH_DATA: 
             return {
                 ...state,
-                ...action.payload.authData,
-                isAuth: true
+                ...action.payload.authData
             }
-        } 
+
         default:
             return state
     }

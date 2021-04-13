@@ -17,6 +17,9 @@ export type ChangeInputType = {
 
 export type AddPostType = {
     type: ACTIONS_TYPE_PROFILE.ADD_POST
+    payload: {
+        newPostText: string
+    }
 }
 
 export type SetUserProfileType = {
@@ -26,15 +29,18 @@ export type SetUserProfileType = {
     }
 }
 
-export type AllProfileActionsType = ChangeInputType | AddPostType | SetUserProfileType
+export type AllProfileActionsType = 
+| ChangeInputType 
+| AddPostType 
+| SetUserProfileType
 
 // Actions
 export const changeInputAC = (inputValue: string): ChangeInputType => {
     return {type: ACTIONS_TYPE_PROFILE.CHANGE_INPUT, payload: {inputValue}}
 }
 
-export const addPostAC = (): AddPostType => {
-    return {type: ACTIONS_TYPE_PROFILE.ADD_POST}
+export const addPostAC = (newPostText: string): AddPostType => {
+    return {type: ACTIONS_TYPE_PROFILE.ADD_POST, payload: {newPostText}}
 }
 
 export const setUserProfileAC = (userProfile: UserProfileType): SetUserProfileType => {

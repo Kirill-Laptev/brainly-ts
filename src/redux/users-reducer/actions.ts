@@ -42,7 +42,13 @@ type ToggleFollowingProgressType = {
     isLoading: boolean
 }
 
-export type AllUsersActionType = FollowType | UnfollowType | SetUsersType | CurrentPageType | SetTotalUsersCountType | ToggleFollowingProgressType
+export type AllUsersActionType = 
+| FollowType 
+| UnfollowType 
+| SetUsersType 
+| CurrentPageType 
+| SetTotalUsersCountType 
+| ToggleFollowingProgressType
 
 // Actions
 export const followAC = (userID: number): FollowType => {
@@ -103,6 +109,7 @@ export const followTC = (userID: number): ThunkType => {
         dispatch(toggleFollowingProgressAC(true, userID))
         usersAPI.followUser(userID)
         .then(({data}) => {
+            debugger
             if(data.resultCode === 0){
                 dispatch(followAC(userID))
             }

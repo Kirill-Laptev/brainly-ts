@@ -18,14 +18,20 @@ type UsersResponseType = {
     error: null | string
 }
 
+type FollowResponseType = {
+    resultCode: number
+    messages: Array<string>
+    data: object
+}
+
 export const usersAPI = {
     getUsers: (pageCount: number, currentPage: number) => {
         return instance.get<UsersResponseType>(`/users?count=${pageCount}&page=${currentPage}`)
     },
     followUser: (userID: number) => {
-        return instance.post(`/follow/${userID}`)
+        return instance.post<FollowResponseType>(`/follow/${userID}`)
     },
     unfollowUser: (userID: number) => {
-        return instance.delete(`/follow/${userID}`)
+        return instance.delete<FollowResponseType>(`/follow/${userID}`)
     }
 }

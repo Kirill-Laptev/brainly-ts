@@ -2,7 +2,7 @@ import React from 'react'
 import logo from '../../assets/img/logo_brainly.png'
 import { connect } from 'react-redux'
 import { AppStateType, ActionsType } from '../../redux/store/store'
-import { getAuthUserDataTC } from '../../redux/auth-reducer/actions'
+import { getAuthUserDataTC, logoutTC } from '../../redux/auth-reducer/actions'
 import { ThunkDispatch } from 'redux-thunk'
 
 
@@ -24,10 +24,9 @@ class HeaderContainer extends React.Component<PropsType> {
                         </div>
                         <div className='header__login'>
                             {this.props.isAuth
-                            ? <button>Log out</button>
+                            ? <button onClick={this.props.logout}>Log out</button>
                             : <button>Login</button>}
-                            
-                        </div>
+                        </div>  
                     </div>
                 </div>
             </>
@@ -42,19 +41,23 @@ type MapStateToPropsType = {
 
 type MapDispatchToPropsType = {
     getAuthUserData: () => void
+    logout: () => void
 }
 
 
-const mapStateToProps = (state: AppStateType) => {
+const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
         isAuth: state.auth.isAuth
     }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): MapDispatchToPropsType => {
     return {
         getAuthUserData: () => {
             dispatch(getAuthUserDataTC())
+        },
+        logout: () => {
+            dispatch(logoutTC())
         }
     }
 }

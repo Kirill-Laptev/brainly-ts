@@ -4,6 +4,7 @@ import { Switch, Route, NavLink } from 'react-router-dom';
 import ProfileContainer from './components/profile/ProfileContainer';
 import UsersContainer from './components/users/UsersContainer';
 import HeaderContainer from './components/header/HeaderContainer';
+import LoginForm from './components/login/LoginForm';
 
 function App() {
   return (
@@ -11,16 +12,6 @@ function App() {
        <div className='app__wrapper'>
         <div className='app__inner'>
             <div className='container'>
-                {/* <div className='header'>
-                    <div className='header__body'>
-                        <div className='header__logo'>
-                            <img src={logo} alt=''/>
-                        </div>
-                        <div className='header__login'>
-                            <button>Login</button>
-                        </div>
-                    </div>
-                </div> */}
                 <HeaderContainer />
                 <div className='main-content'>
                   <Switch>
@@ -28,7 +19,7 @@ function App() {
                   <Route path='/news' render={() => <div>News Feed will be here</div>} />
                   <Route path='/messages' render={() => <div>Messages will be here</div>} />
                   <Route path='/users' component={UsersContainer} />
-                  <Route path='/login' render={() => <div>Login form will be here</div>} />
+                  <Route path='/login' render={() => <LoginForm />} />
                   </Switch>
                 </div>
                 <div className='sidebar'>
