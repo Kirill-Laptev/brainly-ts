@@ -1,6 +1,6 @@
 import { UserProfileType } from './../../api/profile-api';
 import { v1 } from "uuid"
-import { AllProfileActionsType, ACTIONS_TYPE_PROFILE } from "./actions"
+import { ProfileActionsType, ACTIONS_TYPE_PROFILE } from "./actions"
 
 export type MessagesType = {
     id: string
@@ -23,7 +23,7 @@ const initialState: ProfileStateType = {
     ]
 }
 
-export const profileReducer = (state: ProfileStateType = initialState, action: AllProfileActionsType): ProfileStateType => {
+export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionsType): ProfileStateType => {
     switch(action.type){
 
 

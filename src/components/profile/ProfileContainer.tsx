@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AppStateType, ActionsType } from '../../redux/store/store'
+import { AppStateType, AppActionsType } from '../../redux/store/store'
 import { addPostAC, changeInputAC, getUserProfileDataTC } from '../../redux/profile-reducer/actions' 
 import { MessagesType } from '../../redux/profile-reducer/profile-reducer'
 import { compose } from 'redux'
 import ProfileInfo from './ProfileInfo'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom'
 import { withAuthRedirect } from '../../hoc/withAuthRedirect'
 import { ThunkDispatch } from 'redux-thunk'
 import { UserProfileType } from '../../api/profile-api'
@@ -28,10 +28,11 @@ class ProfileContainer extends React.Component<PropsType> {
     componentDidMount(){
         let userID = this.props.match.params.userID
         if(!userID){
-            userID = '12705'
-        }
+            userID = this.props.authorizedUserID!
+        } 
         this.props.getUserProfileData(userID)
     }
+
 
     render() {
         return (
@@ -53,6 +54,8 @@ class ProfileContainer extends React.Component<PropsType> {
 type MapStateToPropsType = {
     posts: Array<MessagesType>
     userProfile: UserProfileType | null
+    authorizedUserID: string | null
+    isAuth: boolean
 }
 
 type MapDispatchToPropsType = {
@@ -63,11 +66,13 @@ type MapDispatchToPropsType = {
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
         posts: state.profile.posts,
-        userProfile: state.profile.userProfile
+        userProfile: state.profile.userProfile,
+        authorizedUserID: state.auth.id,
+        isAuth: state.auth.isAuth
     }
 }
 
-const MapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): MapDispatchToPropsType => {
+const MapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>): MapDispatchToPropsType => {
     return {
         addPost: (newPostText: string) => {
             dispatch(addPostAC(newPostText))

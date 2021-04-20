@@ -1,5 +1,5 @@
 import { profileAPI, UserProfileType } from './../../api/profile-api';
-import { AppStateType, ActionsType } from './../store/store';
+import { AppStateType, AppActionsType } from './../store/store';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
 export enum ACTIONS_TYPE_PROFILE {
@@ -29,7 +29,7 @@ export type SetUserProfileType = {
     }
 }
 
-export type AllProfileActionsType = 
+export type ProfileActionsType = 
 | ChangeInputType 
 | AddPostType 
 | SetUserProfileType
@@ -48,10 +48,10 @@ export const setUserProfileAC = (userProfile: UserProfileType): SetUserProfileTy
 }
 
 // Thunk's
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsType>
+type ThunkType = ThunkAction<void, AppStateType, unknown, AppActionsType>
 
 export const getUserProfileDataTC = (userID: string): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         profileAPI.getUserProfile(userID)
         .then(({data}) => dispatch(setUserProfileAC(data)))
     }

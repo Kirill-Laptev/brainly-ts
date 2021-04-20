@@ -1,6 +1,6 @@
 import { AuthStateType } from './auth-reducer';
 import { IValuesType } from './../../components/login/LoginForm';
-import { AppStateType, ActionsType } from './../store/store';
+import { AppStateType, AppActionsType } from './../store/store';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { authAPI } from './../../api/auth-api';
 
@@ -10,7 +10,7 @@ export enum ACTIONS_TYPE_AUTH {
 }
 
 
-export type AllAuthActionsType = ReturnType<typeof setAuthDataAC>
+export type AuthActionsType = ReturnType<typeof setAuthDataAC>
 
 
 // Actions
@@ -20,11 +20,11 @@ export const setAuthDataAC = (authData: AuthStateType) => {
 
 
 // Thunk's
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsType>
+type ThunkType = ThunkAction<void, AppStateType, unknown, AppActionsType>
 
 export const getAuthUserDataTC = (): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
-        authAPI.getAuthData()
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
+        return authAPI.getAuthData()
         .then(({data}) => {
             if(data.resultCode === 0){
                 dispatch(setAuthDataAC({...data.data, isAuth: true}))
@@ -33,19 +33,20 @@ export const getAuthUserDataTC = (): ThunkType => {
     }
 }
 
-export const loginTC = (email: string, password: string): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+export const loginTC = (email: string, password: string, setSubmitting: Function): ThunkType => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         authAPI.login(email, password)
         .then(({data}) => {
             if(data.resultCode === 0){
                 dispatch(getAuthUserDataTC())
             }
         })
+        .finally(setSubmitting(false))
     }
 }
 
 export const logoutTC = (): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         authAPI.logout()
         .then(({data}) => {
             if(data.resultCode === 0){

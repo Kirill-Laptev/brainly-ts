@@ -1,5 +1,5 @@
 import { UserType } from './../../api/users-api';
-import { ACTIONS_TYPE_USERS, AllUsersActionType } from './actions';
+import { ACTIONS_TYPE_USERS, UsersActionType } from './actions';
 
 export type UsersStateType = {
     users: Array<UserType>
@@ -17,7 +17,7 @@ const initialState: UsersStateType = {
     followingInProgress: [],
 }
 
-export const usersReducer = (state: UsersStateType = initialState, action: AllUsersActionType) => {
+export const usersReducer = (state: UsersStateType = initialState, action: UsersActionType) => {
     switch(action.type){
         case ACTIONS_TYPE_USERS.SET_USERS:
             return {

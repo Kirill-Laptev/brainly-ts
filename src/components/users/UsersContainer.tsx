@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { setUsersAC, setCurrentPageAC, setTotalUsersCountAC, toggleFollowingProgressAC, getUsersTC, followTC, unfollowTC, onPageChangedTC } from '../../redux/users-reducer/actions'
-import { AppStateType, ActionsType } from '../../redux/store/store'
+import { AppStateType, AppActionsType } from '../../redux/store/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { compose } from 'redux'
 import { withAuthRedirect } from '../../hoc/withAuthRedirect'
@@ -95,7 +95,7 @@ const mapStateToProps = (state: AppStateType): mapStateToPropsType => {
     }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): mapDispatchToPropsType => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>): mapDispatchToPropsType => {
     return {
         setUsers: (users: Array<UserType>) => {
             dispatch(setUsersAC(users))

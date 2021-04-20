@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from '../../assets/img/logo_brainly.png'
 import { connect } from 'react-redux'
-import { AppStateType, ActionsType } from '../../redux/store/store'
+import { AppStateType, AppActionsType } from '../../redux/store/store'
 import { getAuthUserDataTC, logoutTC } from '../../redux/auth-reducer/actions'
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -9,10 +9,6 @@ import { ThunkDispatch } from 'redux-thunk'
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
 
 class HeaderContainer extends React.Component<PropsType> {
-
-    componentDidMount(){
-        this.props.getAuthUserData()
-    }
 
     render() {
         return (
@@ -40,7 +36,6 @@ type MapStateToPropsType = {
 }
 
 type MapDispatchToPropsType = {
-    getAuthUserData: () => void
     logout: () => void
 }
 
@@ -51,11 +46,8 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): MapDispatchToPropsType => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>): MapDispatchToPropsType => {
     return {
-        getAuthUserData: () => {
-            dispatch(getAuthUserDataTC())
-        },
         logout: () => {
             dispatch(logoutTC())
         }

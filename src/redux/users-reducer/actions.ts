@@ -1,4 +1,4 @@
-import { AppStateType, ActionsType } from './../store/store';
+import { AppStateType, AppActionsType } from './../store/store';
 import { usersAPI, UserType } from './../../api/users-api';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
@@ -42,7 +42,7 @@ type ToggleFollowingProgressType = {
     isLoading: boolean
 }
 
-export type AllUsersActionType = 
+export type UsersActionType = 
 | FollowType 
 | UnfollowType 
 | SetUsersType 
@@ -92,10 +92,10 @@ export const toggleFollowingProgressAC = (isLoading: boolean, userID: number): T
 
 
 
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsType>
+type ThunkType = ThunkAction<void, AppStateType, unknown, AppActionsType>
 
 export const getUsersTC = (countItems: number, currentPage: number): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>, getState: () => AppStateType) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>, getState: () => AppStateType) => {
         usersAPI.getUsers(countItems, currentPage)
         .then(({data}) => {
             dispatch(setUsersAC(data.items))
@@ -105,7 +105,7 @@ export const getUsersTC = (countItems: number, currentPage: number): ThunkType =
 }
 
 export const followTC = (userID: number): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         dispatch(toggleFollowingProgressAC(true, userID))
         usersAPI.followUser(userID)
         .then(({data}) => {
@@ -119,7 +119,7 @@ export const followTC = (userID: number): ThunkType => {
 }
 
 export const unfollowTC = (userID: number): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         dispatch(toggleFollowingProgressAC(true, userID))
         usersAPI.unfollowUser(userID)
         .then(({data}) => {
@@ -132,7 +132,7 @@ export const unfollowTC = (userID: number): ThunkType => {
 } 
 
 export const onPageChangedTC = (countItems: number, page: number): ThunkType => {
-    return (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>) => {
+    return (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>) => {
         usersAPI.getUsers(countItems, page)
         .then(({data}) => dispatch(setUsersAC(data.items)))
         .finally(() => dispatch(setCurrentPageAC(page)))

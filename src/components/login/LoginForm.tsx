@@ -3,7 +3,7 @@ import enterImg from '../../assets/img/enter.svg'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { TextError } from '../../helpers/TextError/TextError'
-import { AppStateType, ActionsType } from '../../redux/store/store'
+import { AppStateType, AppActionsType } from '../../redux/store/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { loginTC, logoutTC } from '../../redux/auth-reducer/actions'
 import { connect } from 'react-redux'
@@ -26,17 +26,15 @@ const validationSchema = Yup.object({
 })
 
 class LoginForm extends React.Component<LoginFormPropsType> {
-
-    handleSubmit = (values: IValuesType ) => {
-        this.props.login(values.email, values.password)
-    }
+    
 
     render() {
+
+        if(this.props.isAuth) return <Redirect to='/profile' /> 
+
         return (
             <>
-               {this.props.isAuth 
-               ? <Redirect to='/profile' /> 
-               : <div className='login__form'>
+                 <div className='login__form'>
                     <div className='form'>
                         <div className='form__user'>
                             <div>SIGN IN</div>
@@ -45,25 +43,33 @@ class LoginForm extends React.Component<LoginFormPropsType> {
                         <Formik
                         initialValues={InitialValues}
                         validationSchema={validationSchema}
-                        onSubmit={this.handleSubmit}>
-                            <Form>
-                                <div className='form__username'>
-                                    <div><label htmlFor='email'>username</label></div>
-                                    <Field type='text' id='email' name='email' />
-                                    <ErrorMessage name='email' component={TextError}/>
-                                </div>
-                                <div className='form__password'>
-                                    <div><label htmlFor='password'>password</label></div>
-                                    <Field type='password' id='password' name='password' />
-                                    <ErrorMessage name='password' component={TextError}/>
-                                </div>
-                                <div className='form__submit'>
-                                    <button type='submit'>Login</button>
-                                </div>
-                            </Form>
+                        onSubmit={(values, {setSubmitting}) => {
+                            this.props.login(values.email, values.password, setSubmitting) 
+                        }}>
+                            {
+                                (formik) => {
+                                    return (
+                                        <Form>
+                                        <div className='form__username'>
+                                            <div><label htmlFor='email'>username</label></div>
+                                            <Field type='text' id='email' name='email' />
+                                            <ErrorMessage name='email' component={TextError}/>
+                                        </div>
+                                        <div className='form__password'>
+                                            <div><label htmlFor='password'>password</label></div>
+                                            <Field type='password' id='password' name='password' />
+                                            <ErrorMessage name='password' component={TextError}/>
+                                        </div>
+                                        <div className='form__submit'>
+                                            <button type='submit' disabled={formik.isSubmitting || !formik.isValid}>Login</button>
+                                        </div>
+                                        </Form>
+                                    )
+                                }
+                            }
                         </Formik>
                     </div>
-                </div>}
+                </div>
             </>
         )
     }  
@@ -76,7 +82,7 @@ export type MapStateToPropsType = {
 }
 
 export type MapDispatchToPropsType = {
-    login: (email: string, password: string) => void
+    login: (email: string, password: string, setSubmitting: Function) => void
 }
 
 type LoginFormPropsType = MapStateToPropsType & MapDispatchToPropsType
@@ -88,10 +94,10 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, ActionsType>): MapDispatchToPropsType => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppStateType, unknown, AppActionsType>): MapDispatchToPropsType => {
     return {
-        login: (email: string, password: string) => {
-            dispatch(loginTC(email, password))
+        login: (email: string, password: string, setSubmitting: Function) => {
+            dispatch(loginTC(email, password, setSubmitting))
         }
     }
 }
