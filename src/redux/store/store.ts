@@ -27,5 +27,3 @@ export type AppActionsType =
 | UsersActionType
 | AppReducerActionsType
 
-//@ts-ignore
-window.store = store
